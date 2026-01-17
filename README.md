@@ -1,137 +1,291 @@
-# HUBAXRCE
-# SSH Brute Forcer - Hubax Tool
+## ⚡ Quick Start
 
-A fucking fast and efficient SSH brute force tool written in Python. This shit uses multi-threading to blast through password lists and crack SSH logins like a goddamn wrecking ball. Perfect for pentesting and red team engagements.
+```bash
+# Clone the repository
+git clone https://github.com/n0merc/HUBAXRCE.git
+cd HUBAXRCE
 
-## Features
+# Install requirements
+pip install -r requirements.txt
 
-- **Multi-threaded as fuck** - Blast through passwords with configurable thread count
-- **Clean output** - Color-coded results so you know what the hell is happening
-- **Smart stopping** - Stops immediately when valid credentials are found
-- **Error handling** - Handles network issues and timeouts without crashing
-- **Easy to use** - Simple command-line interface anyone can figure out
+# Run the tool
+python ssh_brute.py -t 192.168.1.100 -u root -w passwords.txt
+```
 
-## Installation
+## 🚀 Features
+
+- **Multi-threaded attacks** - Blast through passwords with configurable threads
+- **Smart results saving** - Automatically saves successful credentials
+- **Performance metrics** - Tracks attempts per second and total time
+- **Color-coded output** - Easy-to-read terminal interface
+- **Repository integration** - Part of the HUBAXRCE offensive toolkit
+- **Cross-platform** - Works on Linux, macOS, and Windows
+
+## 📦 Installation
 
 ### Prerequisites
 
 - Python 3.6 or higher
 - pip package manager
+- Network access to target
 
-### Dependencies
-
-Install the required packages:
-
-```bash
-pip install paramiko colorama
-```
-
-Or if you're using requirements.txt:
-
-```bash
-pip install -r requirements.txt
-```
-
-Where `requirements.txt` contains:
-```
-paramiko>=2.11.0
-colorama>=0.4.6
-```
-
-### Clone the Repository
+### Method 1: Clone Repository
 
 ```bash
 git clone https://github.com/n0merc/HUBAXRCE.git
-cd HUBAXRCE.git
+cd HUBAXRCE
+pip install -r requirements.txt
 ```
 
-## Usage
+### Method 2: Direct Download
+
+```bash
+# Download the script
+wget https://raw.githubusercontent.com/n0merc/HUBAXRCE/main/ssh_brute.py
+
+# Install dependencies
+pip install paramiko colorama
+```
+
+### Verify Installation
+
+```bash
+python -c "import paramiko; import colorama; print('Dependencies installed successfully!')"
+```
+
+## 🎯 Usage
 
 ### Basic Syntax
 
 ```bash
-python ssh_brute.py -t TARGET_IP -u USERNAME -w WORDLIST
+python ssh_brute.py -t TARGET -u USERNAME -w WORDLIST
 ```
 
 ### Full Options
 
-```bash
-python ssh_brute.py -t 192.168.1.100 -u root -w passwords.txt -p 2222 -th 20 -to 5
-```
-
-### Arguments
-
 | Argument | Description | Default |
 |----------|-------------|---------|
-| `-t`, `--target` | Target host IP address (REQUIRED) | - |
-| `-u`, `--user` | Username to brute force (REQUIRED) | - |
-| `-w`, `--wordlist` | Password wordlist file (REQUIRED) | - |
+| `-t`, `--target` | Target host IP or domain | **Required** |
+| `-u`, `--user` | Username to brute force | **Required** |
+| `-w`, `--wordlist` | Password wordlist file | **Required** |
 | `-p`, `--port` | SSH port number | 22 |
 | `-th`, `--threads` | Number of concurrent threads | 10 |
 | `-to`, `--timeout` | Connection timeout in seconds | 5 |
+| `-q`, `--quiet` | Quiet mode (minimal output) | False |
+| `-o`, `--output` | Custom output file for results | Auto-generated |
 
-### Example Commands
+### Examples
 
-**Basic attack:**
+**Basic attack on default SSH port:**
 ```bash
 python ssh_brute.py -t 10.0.0.5 -u admin -w rockyou.txt
 ```
 
-**Custom port and more threads:**
+**Custom port with more threads:**
 ```bash
 python ssh_brute.py -t 192.168.1.100 -u root -w passwords.txt -p 2222 -th 50
 ```
 
+**Quiet mode for scripting:**
+```bash
+python ssh_brute.py -t target.com -u ubuntu -w wordlist.txt -q
+```
+
 **With custom timeout:**
 ```bash
-python ssh_brute.py -t 10.10.10.10 -u ubuntu -w common_passwords.txt -to 3
+python ssh_brute.py -t 10.10.10.10 -u test -w common.txt -to 3
 ```
 
-## Wordlists
+## 📊 Wordlists
 
-You'll need a password wordlist. Here are some good ones:
+You need a password wordlist. Here are recommended sources:
 
-- **rockyou.txt** - Classic and effective
-- **darkc0de.txt** - Another solid choice
-- **Common passwords** from SecLists
-- Create your own with tools like Crunch or Cewl
+### Popular Wordlists
 
-## How It Works
+1. **RockYou.txt** - Classic and effective
+   ```bash
+   wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+   ```
 
-1. **Loads the wordlist** - Reads passwords from your specified file
-2. **Creates threads** - Spawns multiple worker threads for parallel attacks
-3. **Attempts connections** - Each thread tries SSH authentication with different passwords
-4. **Reports success** - Immediately stops and reports when valid credentials are found
-5. **Handles failures** - Gracefully handles failed attempts and network issues
+2. **SecLists** - Comprehensive collection
+   ```bash
+   git clone https://github.com/danielmiessler/SecLists.git
+   ```
 
+3. **Darkc0de.txt** - Another solid choice
 
+### Generate Custom Wordlists
 
+```bash
+# Using Crunch
+crunch 6 8 0123456789 -o numbers.txt
+
+# Using Cewl
+cewl https://target.com -w custom_words.txt
 ```
-[*] Starting SSH brute force on 192.168.1.100:22
+
+## 🔧 How It Works
+
+### Technical Details
+
+1. **Thread Management**
+   - Creates multiple worker threads for parallel attacks
+   - Uses queue system for password distribution
+   - Thread-safe logging and result handling
+
+2. **SSH Connection**
+   - Uses Paramiko library for SSHv2 protocol
+   - Implements proper error handling and timeouts
+   - Supports custom SSH ports and banners
+
+3. **Result Processing**
+   - Immediately stops on successful login
+   - Saves credentials to timestamped file
+   - Calculates performance metrics
+
+### Performance Optimization
+
+- Adjust thread count based on network speed
+- Use smaller wordlists for targeted attacks
+- Increase timeout for slow networks
+- Use `-q` flag for automated scripts
+
+## 📈 Output Examples
+
+### Successful Attack
+```
+██╗  ██╗██╗   ██╗██████╗  █████╗ ██╗  ██╗██████╗  ██████╗███████╗
+██║  ██║██║   ██║██╔══██╗██╔══██╗╚██╗██╔╝██╔══██╗██╔════╝██╔════╝
+███████║██║   ██║██████╔╝███████║ ╚███╔╝ ██████╔╝██║     █████╗  
+██╔══██║██║   ██║██╔══██╗██╔══██║ ██╔██╗ ██╔══██╗██║     ██╔══╝  
+██║  ██║╚██████╔╝██████╔╝██║  ██║██╔╝ ██╗██║  ██║╚██████╗███████╗
+╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
+
+[*] HUBAXRCE SSH Brute Forcer
+[*] Target: 192.168.1.100:22
 [*] Username: root
 [*] Threads: 10
-[-] Failed: root:password123
-[-] Failed: root:admin
-[-] Failed: root:123456
+[*] Timeout: 5s
+[*] Loaded 10000 passwords
+[*] Starting attack...
+
 [+] FUCKING SUCCESS! root:toor works on 192.168.1.100:22
+[+] Time elapsed: 45.23 seconds | Attempts: 1234
+[+] Rate: 27.28 attempts/second
+[*] Results saved to: hubax_ssh_results_2024-01-15_14-30-45.txt
 ```
 
-## Legal Disclaimer
+### Results File
+```txt
+# HUBAXRCE SSH Brute Force Results
+# Generated: Mon Jan 15 14:30:45 2024
+# Tool: ssh_brute.py
+# Repository: https://github.com/n0merc/HUBAXRCE.git
 
-**This tool is for authorized security testing and educational purposes only.** You are responsible for your own actions. Using this tool against systems you don't own or have explicit permission to test is illegal and unethical. The developers assume no liability and are not responsible for any misuse or damage caused by this program.
+[SUCCESS]
+Target: 192.168.1.100:22
+Username: root
+Password: toor
+Time: 45.23 seconds
+Attempts: 1234
+Rate: 27.28 attempts/second
 
-## Contributing
+# Commands to use:
+ssh root@192.168.1.100 -p 22
+# Password: toor
+```
 
-Found a bug? Want to add features? Fork this shit and submit a pull request. Make sure your code doesn't suck.
+## ⚠️ Legal Disclaimer
 
-## License
+**THIS TOOL IS FOR AUTHORIZED SECURITY TESTING AND EDUCATIONAL PURPOSES ONLY.**
 
-MIT License - Do whatever the fuck you want with it, but don't blame me when you get caught.
+- You must have explicit permission to test the target system
+- Unauthorized access to computer systems is illegal
+- The developers assume no liability for misuse
+- Use only on systems you own or have permission to test
 
-## Support
+By using this tool, you agree to use it responsibly and legally.
 
-For issues, questions, or just to say what's up, open an issue on GitHub. No hand-holding though - figure basic shit out yourself.
+## 🔒 Security Considerations
+
+- Use strong passwords on your own systems
+- Implement SSH key authentication instead of passwords
+- Use fail2ban or similar tools to block brute force attempts
+- Regularly update and patch your systems
+- Monitor authentication logs for suspicious activity
+
+## 🤝 Contributing
+
+Found a bug? Want to add features? Contribute to the HUBAXRCE repository:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+**Guidelines:**
+- Follow PEP 8 coding standards
+- Add comments for complex logic
+- Update documentation
+- Test your changes thoroughly
+
+## 📚 Resources
+
+- [Paramiko Documentation](http://www.paramiko.org/)
+- [SSH Protocol Specification](https://tools.ietf.org/html/rfc4252)
+- [OWASP Testing Guide](https://owasp.org/www-project-web-security-testing-guide/)
+- [Pentesting Methodology](https://pentest-book.six2dez.com/)
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**"ModuleNotFoundError: No module named 'paramiko'"**
+```bash
+pip install paramiko
+```
+
+**Wordlist not found**
+```bash
+# Download a wordlist
+wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-10000.txt
+```
+
+**Connection timeout**
+```bash
+# Increase timeout
+python ssh_brute.py -t target -u user -w wordlist.txt -to 10
+```
+
+**Slow performance**
+```bash
+# Increase threads
+python ssh_brute.py -t target -u user -w wordlist.txt -th 50
+```
+
+## 📞 Support
+
+- **GitHub Issues**: [HUBAXRCE Issues](https://github.com/n0merc/HUBAXRCE/issues)
+- **Repository**: [https://github.com/n0merc/HUBAXRCE.git](https://github.com/n0merc/HUBAXRCE.git)
+- **Follow Updates**: Star the repository for notifications
+
+## 📄 License
+
+MIT License - See LICENSE file for details.
+
+```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ---
 
-**Made with ❤️ (and a lot of profanity) by the Hubax Team**
+**Made with offensive intent by the HUBAX Team**  
+**Repository: https://github.com/n0merc/HUBAXRCE.git**  
+**Use responsibly or face the fucking consequences**
+
