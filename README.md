@@ -42,7 +42,7 @@ colorama>=0.4.6
 
 ```bash
 git clone https://github.com/n0merc/HUBAXRCE.git
-cd ssh-brute-forcer
+cd HUBAXRCE.git
 ```
 
 ## Usage
