@@ -41,7 +41,7 @@ colorama>=0.4.6
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/n0mercy/ssh-brute-forcer.git
+git clone https://github.com/n0merc/HUBAXRCE.git
 cd ssh-brute-forcer
 ```
 
